@@ -1,9 +1,8 @@
-import {useEffect, useState} from 'react'
+import {useEffect, useState} from "react";
 import request from "./request";
-import './App.css'
 
-function App() {
-    const [content, setContent] = useState('')
+function Outlines() {
+	const [content, setContent] = useState('')
     const [outlines, setOutlines] = useState([])
 
     useEffect(() => {
@@ -38,4 +37,4 @@ function App() {
     )
 }
 
-export default App
+export default Outlines
