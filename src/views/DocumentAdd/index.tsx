@@ -3,8 +3,8 @@ import request from "../../request";
 import './index.css'
 
 export default function DocumentAdd() {
-	const [content, setContent] = useState('')
 	const [outlines, setOutlines] = useState()
+	const [selectedFiles, setSelectedFiles] = useState([]);
 
 	useEffect(() => {
 		request.get('/outlines/').then(response => {
@@ -13,9 +13,12 @@ export default function DocumentAdd() {
 	}, [])
 
 	const submit = () => {
-		request.post('/outlines/', {
-			outline: content
-		}).then(response => {
+		const formData = new FormData();
+    for (let i = 0; i < selectedFiles.length; i++) {
+      formData.append('outlines', selectedFiles[i]);
+    }
+
+		request.post('/outlines/', formData).then(response => {
 			setOutlines(response.data['outlines'])
 			alert('add success')
 		})
@@ -33,6 +36,10 @@ export default function DocumentAdd() {
 			setOutlines(response.data['outlines'])
 		})
 	}
+
+  const handleFileSelect = (event) => {
+    setSelectedFiles(event.target.files);
+  };
 
 	const renderDocumentArea = (areaName, outlines) => (
 		<>
@@ -70,7 +77,7 @@ export default function DocumentAdd() {
 		<>
 			<div className="container">
 				<div className="form">
-					<textarea cols="30" rows="10" onChange={event => setContent(event.target.value)}>{content}</textarea>
+					<input type="file" multiple onChange={handleFileSelect}/>
 					<button onClick={submit}>提交</button>
 					<button onClick={deleteAll}>删除全部</button>
 				</div>
